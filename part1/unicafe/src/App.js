@@ -3,20 +3,25 @@ import { useState } from 'react';
 
 const StaticLine = ({ text, content }) => {
   return (
-    <p>{text}: {content}</p>
+    <tr>
+      <td>{text}</td>
+      <td>{content}</td>
+    </tr>
   )
 };
 
 const Statistics = ({ good, neutral, bad }) => {
   return (
-    <>
-      <StaticLine text="Good" content={good}/ >
-      <StaticLine text="Neutral" content={neutral}/ >
-      <StaticLine text="Bad" content={bad}/>
-      <StaticLine text="All" content={good + neutral + bad}/>
-      <StaticLine text="Average" content={(good - bad) / (good + neutral + bad)}/>
-      <StaticLine text="Positive" content={good / (good + neutral + bad) * 100}/>
-    </>
+    <table>
+      <tbody>
+        <StaticLine text="Good" content={good}/ >
+        <StaticLine text="Neutral" content={neutral}/ >
+        <StaticLine text="Bad" content={bad}/>
+        <StaticLine text="All" content={good + neutral + bad}/>
+        <StaticLine text="Average" content={((good - bad) / (good + neutral + bad)).toFixed(1)}/>
+        <StaticLine text="Positive" content={`${(good / (good + neutral + bad) * 100).toFixed(1)}%`}/>
+      </tbody>
+    </table>
   )
 };
 
