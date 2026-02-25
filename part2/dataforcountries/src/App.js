@@ -1,21 +1,8 @@
-import {useState} from "react";
-
-const CountryDetails = ({ country }) => {
-  return (
-    <div>
-      <h2>{country.name.common}</h2>
-      <p>Capital: {country.capital?.[0] || 'N/A'}</p>
-      <p>Área: {country.area} km²</p>
-      <h3>Idiomas:</h3>
-      <ul>
-        {country.languages && Object.values(country.languages).map((language, index) => (
-          <li key={index}>{language}</li>
-        ))}
-      </ul>
-      <img src={country.flags.png} alt={`Bandeira de ${country.name.common}`} width="200" />
-    </div>
-  );
-};
+import { useState } from 'react';
+import CountryDetails from './components/CountryDetails';
+import CountryList from './components/CountryList';
+import SearchBar from './components/SearchBar';
+import countriesService from './services/countries';
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -26,17 +13,9 @@ function App() {
     const value = e.target.value;
     setSearch(value);
     setSelectedCountry(null);
-    
+
     if (value.length > 0) {
-      fetch(`https://restcountries.com/v3.1/name/${value}`)
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          }
-          return [];
-        })
-        .then((data) => setCountries(data))
-        .catch(() => setCountries([]));
+      countriesService.getByName(value).then((data) => setCountries(data));
     } else {
       setCountries([]);
     }
@@ -52,14 +31,7 @@ function App() {
     } else if (countries.length > 1 && countries.length <= 10) {
       return (
         <div>
-          {countries.map((country) => (
-            <p key={country.cca3}>
-              {country.name.common}{' '}
-              <button type="button" onClick={() => handleShowCountry(country)}>
-                show
-              </button>
-            </p>
-          ))}
+          <CountryList countries={countries} onShow={handleShowCountry} />
           {selectedCountry && <CountryDetails country={selectedCountry} />}
         </div>
       );
@@ -72,14 +44,7 @@ function App() {
   return (
     <div className="App">
       <h1>Data for Countries</h1>
-      <div>
-        <p>find a country</p>
-        <input 
-          type="text" 
-          value={search}
-          onChange={handleSearchChange} 
-        />
-      </div>
+      <SearchBar value={search} onChange={handleSearchChange} />
       <div>
         {renderCountries()}
       </div>
