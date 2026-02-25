@@ -4,7 +4,7 @@ const Persons = ({ persons }) => {
     return (
         <>
             {persons.map(person => (
-                <Person key={person.name} person={person} />
+                <Person key={person.id} person={person} />
             ))}
         </>
     )
