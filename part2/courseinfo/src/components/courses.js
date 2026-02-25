@@ -1,3 +1,6 @@
+import Total from './total';
+import Content from './content';
+import Header from './header';
 
 const Course = ({ course }) => {
   return (
