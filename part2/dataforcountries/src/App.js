@@ -20,10 +20,12 @@ const CountryDetails = ({ country }) => {
 function App() {
   const [countries, setCountries] = useState([]);
   const [search, setSearch] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearch(value);
+    setSelectedCountry(null);
     
     if (value.length > 0) {
       fetch(`https://restcountries.com/v3.1/name/${value}`)
@@ -40,6 +42,10 @@ function App() {
     }
   };
 
+  const handleShowCountry = (country) => {
+    setSelectedCountry(country);
+  };
+
   const renderCountries = () => {
     if (countries.length > 10) {
       return <p>Too many matches, specify another filter</p>;
@@ -47,8 +53,14 @@ function App() {
       return (
         <div>
           {countries.map((country) => (
-            <p key={country.cca3}>{country.name.common}</p>
+            <p key={country.cca3}>
+              {country.name.common}{' '}
+              <button type="button" onClick={() => handleShowCountry(country)}>
+                show
+              </button>
+            </p>
           ))}
+          {selectedCountry && <CountryDetails country={selectedCountry} />}
         </div>
       );
     } else if (countries.length === 1) {
