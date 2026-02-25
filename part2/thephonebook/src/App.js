@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
+import {create} from './services/persons'
 
 import axios from "axios"
 
@@ -41,8 +42,7 @@ const [newNumber, setNewNumber] = useState('')
       number: newNumber
     }
 
-    await axios
-      .post('http://localhost:3001/persons', personObject)
+    await create(personObject)
       .then(response => {
       setPersons(persons.concat(response.data))
     })
