@@ -2,16 +2,14 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
-import {create} from './services/persons'
-
-import axios from "axios"
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
+    personService
+      .getAll()
       .then(response => {
         setPersons(response.data)
       })
@@ -42,10 +40,11 @@ const [newNumber, setNewNumber] = useState('')
       number: newNumber
     }
 
-    await create(personObject)
+    await personService
+      .create(personObject)
       .then(response => {
-      setPersons(persons.concat(response.data))
-    })
+        setPersons(persons.concat(response.data))
+      })
 
     setNewName('')
     setNewNumber('')
@@ -55,6 +54,21 @@ const [newNumber, setNewNumber] = useState('')
     setFilter(event.target.value)
   }
 
+  const handleDeletePerson = (id) => {
+    const personToDelete = persons.find(person => person.id === id)
+    const name = personToDelete ? personToDelete.name : 'this contact'
+    const confirmDelete = window.confirm(`Delete ${name}?`)
+    if (!confirmDelete) {
+      return
+    }
+
+    personService
+      .remove(id)
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== id))
+      })
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -62,7 +76,7 @@ const [newNumber, setNewNumber] = useState('')
       <h2>Add a new</h2>
       <PersonForm addPerson={handleAddPerson} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={(e) => setNewNumber(e.target.value)} />
       <h2>Numbers</h2>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} handleDelete={handleDeletePerson} />
     </div>
   )
 }
