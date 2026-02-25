@@ -30,8 +30,24 @@ const [newNumber, setNewNumber] = useState('')
   const handleAddPerson = async (e) => {
     e.preventDefault()
 
-    if (persons.some(p => p.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+    const existing = persons.find(p => p.name === newName)
+    if (existing) {
+      const confirmUpdate = window.confirm(`${newName} já existe. Atualizar número?`)
+      if (!confirmUpdate) {
+        return
+      }
+
+      const updatedPerson = { ...existing, number: newNumber }
+      await personService
+        .update(existing.id, updatedPerson)
+        .then(response => {
+          setPersons(persons.map(p =>
+            p.id !== existing.id ? p : response.data
+          ))
+        })
+
+      setNewName('')
+      setNewNumber('')
       return
     }
 
