@@ -7,6 +7,8 @@ import './App.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
+  const [message, setMessage] = useState(null)
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     personService
@@ -16,8 +18,17 @@ const App = () => {
       })
   }, [])
 
-const [newName, setNewName] = useState('')
-const [newNumber, setNewNumber] = useState('')
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
+
+  const showMessage = (text, isErrorValue = false) => {
+    setMessage(text)
+    setIsError(isErrorValue)
+    setTimeout(() => {
+      setMessage(null)
+      setIsError(false)
+    }, 4000)
+  }
 
   const [filter, setFilter] = useState('')
   const personsToShow = persons.filter(person =>
@@ -45,6 +56,10 @@ const [newNumber, setNewNumber] = useState('')
           setPersons(persons.map(p =>
             p.id !== existing.id ? p : response.data
           ))
+          showMessage(`Numero atualizado para ${response.data.name}`)
+        })
+        .catch(() => {
+          showMessage('Falha ao atualizar o contato', true)
         })
 
       setNewName('')
@@ -61,6 +76,10 @@ const [newNumber, setNewNumber] = useState('')
       .create(personObject)
       .then(response => {
         setPersons(persons.concat(response.data))
+        showMessage(`Contato adicionado: ${response.data.name}`)
+      })
+      .catch(() => {
+        showMessage('Falha ao adicionar o contato', true)
       })
 
     setNewName('')
@@ -83,11 +102,20 @@ const [newNumber, setNewNumber] = useState('')
       .remove(id)
       .then(() => {
         setPersons(persons.filter(person => person.id !== id))
+        showMessage(`Contato removido: ${name}`)
+      })
+      .catch(() => {
+        showMessage('Falha ao remover o contato', true)
       })
   }
 
   return (
     <div>
+      {message && (
+        <div className={isError ? 'error' : 'success'}>
+          {message}
+        </div>
+      )}
       <h2 className="title">Phonebook</h2>
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <h2 className="title">Add a new</h2>

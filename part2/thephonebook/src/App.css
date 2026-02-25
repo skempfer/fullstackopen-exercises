@@ -20,3 +20,21 @@ button.button-add {
 	background-color: rgb(91, 217, 91);
 	border-color: rgb(91, 217, 91);
 }
+
+.success {
+	background-color: rgb(220, 245, 220);
+	border: 2px solid rgb(91, 217, 91);
+	color: rgb(20, 120, 20);
+	font: bold 14px Arial, sans-serif;
+	margin: 8px 0 12px;
+	padding: 8px 12px;
+}
+
+.error {
+	background-color: rgb(255, 230, 230);
+	border: 2px solid rgb(213, 96, 96);
+	color: rgb(140, 20, 20);
+	font: bold 14px Arial, sans-serif;
+	margin: 8px 0 12px;
+	padding: 8px 12px;
+}
