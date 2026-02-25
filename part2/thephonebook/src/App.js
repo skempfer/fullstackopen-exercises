@@ -28,13 +28,25 @@ const [newNumber, setNewNumber] = useState('')
     setNewName(event.target.value)
   }
 
-  const handleAddPerson = (e) => {
+  const handleAddPerson = async (e) => {
     e.preventDefault()
+
     if (persons.some(p => p.name === newName)) {
       alert(`${newName} is already added to phonebook`)
       return
     }
-    setPersons(persons.concat({ name: newName, number: newNumber }))
+
+    const personObject = {
+      name: newName,
+      number: newNumber
+    }
+
+    await axios
+      .post('http://localhost:3001/persons', personObject)
+      .then(response => {
+      setPersons(persons.concat(response.data))
+    })
+
     setNewName('')
     setNewNumber('')
   }
