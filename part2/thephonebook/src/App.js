@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import personService from './services/persons'
+import './App.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -87,11 +88,11 @@ const [newNumber, setNewNumber] = useState('')
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h2 className="title">Phonebook</h2>
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
-      <h2>Add a new</h2>
+      <h2 className="title">Add a new</h2>
       <PersonForm addPerson={handleAddPerson} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={(e) => setNewNumber(e.target.value)} />
-      <h2>Numbers</h2>
+      <h2 className="title">Numbers</h2>
       <Persons persons={personsToShow} handleDelete={handleDeletePerson} />
     </div>
   )
