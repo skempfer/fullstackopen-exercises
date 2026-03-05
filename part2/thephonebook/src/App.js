@@ -58,8 +58,8 @@ const App = () => {
           ))
           showMessage(`Numero atualizado para ${response.data.name}`)
         })
-        .catch(() => {
-          showMessage('Falha ao atualizar o contato', true)
+        .catch(error => {
+          showMessage(error.response?.data?.error || 'Falha ao atualizar o contato', true)
         })
 
       setNewName('')
@@ -78,8 +78,8 @@ const App = () => {
         setPersons(persons.concat(response.data))
         showMessage(`Contato adicionado: ${response.data.name}`)
       })
-      .catch(() => {
-        showMessage('Falha ao adicionar o contato', true)
+      .catch(error => {
+        showMessage(error.response?.data?.error || 'Falha ao adicionar o contato', true)
       })
 
     setNewName('')
@@ -104,8 +104,8 @@ const App = () => {
         setPersons(persons.filter(person => person.id !== id))
         showMessage(`Contato removido: ${name}`)
       })
-      .catch(() => {
-        showMessage('Falha ao remover o contato', true)
+      .catch(error => {
+        showMessage(error.response?.data?.error || 'Falha ao remover o contato', true)
       })
   }
 
