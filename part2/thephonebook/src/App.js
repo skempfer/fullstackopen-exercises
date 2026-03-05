@@ -42,6 +42,16 @@ const App = () => {
   const handleAddPerson = async (e) => {
     e.preventDefault()
 
+    // Validações do frontend
+    if (newName.length < 3) {
+      showMessage('O nome deve ter pelo menos 3 caracteres', true)
+      return
+    }
+    if (newNumber.length < 8) {
+      showMessage('O número deve ter pelo menos 8 caracteres', true)
+      return
+    }
+
     const existing = persons.find(p => p.name === newName)
     if (existing) {
       const confirmUpdate = window.confirm(`${newName} já existe. Atualizar número?`)
